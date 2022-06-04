@@ -1,0 +1,36 @@
+@baseApiUri=http://localhost:3000/api/v1/
+@password=UnsicheresPasswort,WasAberSehrLangIst
+@token={{Login.response.body.$.token}}
+
+GET {{baseApiUri}} HTTP/1.1
+Accept: application/json
+
+### 
+
+GET {{baseApiUri}}users/me HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### 
+# @name Login
+POST {{baseApiUri}}users/login HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "username": "mamphis",
+  "password": "{{password}}"
+}
+
+###
+# @name Register
+POST {{baseApiUri}}users/register HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "mamphis@example.com",
+  "username": "mamphis",
+  "password": "{{password}}",
+  "name":"Mamphis"
+}
