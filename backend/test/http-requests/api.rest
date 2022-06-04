@@ -1,0 +1,4 @@
+@baseApiUri=http://localhost:3000/api/v1/
+
+GET {{baseApiUri}} HTTP/1.1
+Accept: application/json
