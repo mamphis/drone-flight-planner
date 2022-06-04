@@ -24,10 +24,12 @@ export class Server {
 
         this.app.use(async (req, res, next) => {
             const start = moment();
-            await next();
-
-            const ms = moment().diff(start);
-            console.log(`${start.format('DD.MM.YY HH:mm:ss.SSS')} ${req.method} ${req.originalUrl} - ${ms}ms`);
+            next();
+        
+            res.on('finish', () => {
+                const ms = moment().diff(start);
+                console.log(`${start.format('DD.MM.YY HH:mm:ss.SSS')}: [${req.method}] ${req.originalUrl} - ${ms}ms => ${res.statusCode}`);
+            });
         });
     }
 
