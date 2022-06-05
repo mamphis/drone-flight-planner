@@ -2,6 +2,7 @@ import express, { Application } from "express";
 import moment from "moment";
 import apiRouter from './routes';
 import createHttpError from "http-errors";
+import cors from "cors";
 
 export class Server {
     private readonly app: Application;
@@ -21,7 +22,7 @@ export class Server {
     private config(): void {
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: false }));
-
+        this.app.use(cors());
         this.app.use(async (req, res, next) => {
             const start = moment();
             next();
