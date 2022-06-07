@@ -23,11 +23,12 @@ model User {
 }
 
 model Team {
-    id        String   @id @default(cuid())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @default(now()) @updatedAt
-    members   User[]
+    id             String          @id @default(cuid())
+    name           String
+    createdAt      DateTime        @default(now())
+    updatedAt      DateTime        @default(now()) @updatedAt
+    members        User[]
+    flightMissions FlightMission[]
 }
 
 model FlightMission {
@@ -40,6 +41,8 @@ model FlightMission {
     homeLatitude   Decimal
     flightSpeed    Decimal
     waypoints      Waypoint[]
+    team           Team       @relation(fields: [teamId], references: [id])
+    teamId         String
 }
 
 enum WaypointAction {
