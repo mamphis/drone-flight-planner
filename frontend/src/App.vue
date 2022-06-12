@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { userStore } from './stores/user';
+
 const user = userStore();
 
 let loggedIn = false;
@@ -32,6 +33,7 @@ user.$subscribe(() => {
     height: 100vh;
     display: flex;
     justify-content: center;
+    text-align: center;
 }
 .navbar {
     flex: 1;
