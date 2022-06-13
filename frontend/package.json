@@ -12,9 +12,11 @@
     "pinia": "^2.0.14",
     "pinia-plugin-persist": "^1.0.0",
     "vue": "^3.2.13",
+    "vue-route": "^1.5.1",
     "vue-router": "^4.0.3"
   },
   "devDependencies": {
+    "@fortawesome/fontawesome-free": "^6.1.1",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "@vue/cli-plugin-babel": "~5.0.0",
