@@ -68,12 +68,25 @@ export const userStore = defineStore({
                 router.push('/');
                 return;
             } else {
-                const {code} = await response.json();
+                const { code } = await response.json();
                 if (code === 'P2002') { // TODO: maybe the error code will change depending on the backend
                     throw new Error('Registration failed: Either Username or Email is already taken.');
                 }
                 throw new Error(`Registration failed: ${response.status}`);
             }
+        },
+        async logout() {
+            this.$patch({
+                user: undefined,
+                token: undefined
+            });
+            router.push('/login');
+        },
+        async updatePassword(password: string, newPassword: string) {
+            //TODO: Update Password
+        },
+        async updateUser(user: User) {
+            //TODO: Update User
         }
     },
     persist: {

@@ -13,13 +13,22 @@ user.$subscribe(() => {
   updateLoginState();
 });
 </script>
+<script lang="ts">
+import sidebar from '@/components/sidebar/sidebar.vue'
+import { sidebarWidth } from '@/components/sidebar/state'
+
+export default {
+    components: {
+        sidebar
+    },
+}
+</script>
 
 <template>
-  <nav v-if="loggedIn">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view  class="router"/>
+    <sidebar />
+    <div :style="{ 'margin-left': sidebarWidth, width: '100%' }">
+        <router-view />
+    </div>
 </template>
 
 <style>
@@ -32,7 +41,7 @@ user.$subscribe(() => {
     font-weight: normal;
     height: 100vh;
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     text-align: center;
 }
 .navbar {

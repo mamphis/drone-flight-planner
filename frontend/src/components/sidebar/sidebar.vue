@@ -21,9 +21,9 @@ export default {
       <span v-else>Drone Flight Planer</span>
     </h1>
 
-    <sidebarLink to="/1" icon="fas fa-home">Home</sidebarLink>
+    <sidebarLink to="/Home" icon="fas fa-home">Home</sidebarLink>
     <sidebarLink to="/2" icon="fas fa-home">Test1</sidebarLink>
-    <sidebarLink to="/3" icon="fas fa-home">Test2</sidebarLink>
+    <sidebarLink to="/profile" icon="fas fa-user">Profile</sidebarLink>
     <span
       class="collapse-icon"
       :class="{ 'rotate-180': collapsed }"
