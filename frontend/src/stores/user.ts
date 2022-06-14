@@ -82,11 +82,64 @@ export const userStore = defineStore({
             });
             router.push('/login');
         },
-        async updatePassword(password: string, newPassword: string) {
-            //TODO: Update Password
+        async updatePassword(password: string, newPassword: string): Promise<boolean> {
+            if (!password) {
+                return false;
+            }
+            if (!newPassword) {
+                return false;
+            }
+
+            const main = mainStore();
+            const url = `${main.apiUrl}/users/changePassword`;
+            const response = await fetch(url, {
+                method: "POST",
+                body: JSON.stringify({ password, newPassword }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${this.token}`
+                }
+            });
+
+            if (response.status === 200) {
+                return true;
+            } else {
+                if (response.status == 401) {
+                    this.logout();
+                }
+                const content = await response.json();
+                console.warn(content);
+                return false;
+            }
         },
-        async updateUser(user: User) {
-            //TODO: Update User
+        async updateUser(user: User): Promise<boolean> {
+            const main = mainStore();
+            const url = `${main.apiUrl}/users/${this.user?.id}`;
+            const response = await fetch(url, {
+                method: "PUT",
+                body: JSON.stringify(user),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${this.token}`
+                }
+            });
+
+            if (response.status === 200) {
+                const newUser = await response.json() as User;
+                this.$patch({
+                    user: newUser,
+                });
+                return true;
+            } else {
+                if (response.status == 401) {
+                    this.logout();
+                }
+                const content = await response.json();
+                console.warn(content);
+                return false;
+            }
         }
     },
     persist: {

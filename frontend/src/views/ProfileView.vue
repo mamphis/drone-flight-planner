@@ -9,14 +9,16 @@ let newPassword = ref('');
 
 async function updatePassword() {
     if (password.value !== newPassword.value) {
-        await db.updatePassword(password.value, newPassword.value);
-        password.value = newPassword.value = '';
+        if (await db.updatePassword(password.value, newPassword.value)) {
+            password.value = newPassword.value = '';
+        }
     }
 }
 
 async function updateUser() {
-    await db.updateUser(user.value);
-    user.value = db.user!;
+    if(await db.updateUser(user.value)){
+        user.value = db.user!;
+    }
 }
 </script>
 <template>
