@@ -21,7 +21,7 @@ for (const version in apiVersions) {
 }
 
 router.use('/:apiVersion', (req, res, next) => {
-    const apiVersion = req.params.apiVersion;
+    const { apiVersion } = req.params;
 
     return next(createHttpError(404, `API version ${apiVersion} not found.`));
 });
