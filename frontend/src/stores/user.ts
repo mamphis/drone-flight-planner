@@ -1,6 +1,8 @@
 import router from "@/router";
 import { defineStore } from "pinia";
 import { mainStore } from './main';
+import { translate } from '@/libs/localization/localizator';
+
 type User = {
     username: string,
     email: string,
@@ -44,7 +46,10 @@ export const userStore = defineStore({
                 router.push('/');
                 return;
             } else {
-                throw new Error(`Login failed: ${response.status}`);
+                if (response.status === 401) {
+                    throw new Error(translate('login.messages.invalidCredentials'));
+                }
+                throw new Error(translate('login.messages.loginFailed', `${response.status}`));
             }
         },
         async register({ username, password, email, name }: Omit<User, 'id'> & { password: string }) {
