@@ -1,32 +1,24 @@
 <script setup lang="ts">
 import { userStore } from './stores/user';
+import sidebar from '@/components/sidebar/sidebar.vue'
+import { sidebarWidth } from '@/components/sidebar/state'
 
 const user = userStore();
 
 let loggedIn = false;
 
 const updateLoginState = () => {
-  loggedIn = user.isLoggedIn;
+    loggedIn = user.isLoggedIn;
 };
 
 user.$subscribe(() => {
-  updateLoginState();
+    updateLoginState();
 });
-</script>
-<script lang="ts">
-import sidebar from '@/components/sidebar/sidebar.vue'
-import { sidebarWidth } from '@/components/sidebar/state'
-
-export default {
-    components: {
-        sidebar
-    },
-}
 </script>
 
 <template>
-    <sidebar />
-    <div :style="{ 'margin-left': sidebarWidth, width: '100%' }">
+    <sidebar v-if="loggedIn" />
+    <div :style="{ 'margin-left': loggedIn ? sidebarWidth : 0, width: '100%' }">
         <router-view />
     </div>
 </template>
@@ -34,6 +26,7 @@ export default {
 <style>
 @import "@/assets/base.css";
 @import "@/assets/inputs.css";
+
 #app {
     max-width: 1280px;
     margin: 0 auto;
@@ -44,9 +37,11 @@ export default {
     /* justify-content: center; */
     text-align: center;
 }
+
 .navbar {
     flex: 1;
 }
+
 .content {
     flex: 1;
 }
