@@ -19,5 +19,34 @@ export const en = {
             emailRequired: 'Email is required',
             loginFailed: 'Login failed: {0}',
         },
-    }
+    },
+    register: {
+        messages: {
+            usernameAlreadyTaken: 'Username or Email is already taken',
+        }
+    },
+    profile: {
+        labels: {
+            profile: 'Profile',
+            username: 'Username',
+            name: 'Name',
+            email: 'Email',
+            oldPassword: 'Old Password',
+            newPassword: 'New Password',
+            changePassword: 'Change Password',
+            updateProfile: 'Update Profile',
+            changeProfilePicture: 'Change Profile Picture',
+        },
+    },
+    sidebar: {
+        title: 'Drone Flight Planner',
+        labels: {
+            home: 'Home',
+            profile: 'Profile',
+            logout: 'Logout',
+            flights: 'Flights',
+            missions: 'Missions',
+            teams: 'Teams',
+        },
+    },
 };

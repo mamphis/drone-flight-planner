@@ -1,14 +1,13 @@
-<script lang="ts">
+<script setup lang="ts">
 import { collapsed, toggleSidebar, sidebarWidth } from './state'
 import sidebarLink from './sidebarLink.vue';
-export default {
-  name: 'sidebar-component',
-  components: { sidebarLink },
-  props: {},
-  setup() {
-    return { collapsed, toggleSidebar, sidebarWidth }
-  }
-}
+import { inject } from 'vue';
+import { Translator } from '@/libs/localization/localizator';
+import { userStore } from '@/stores/user';
+
+const $l = inject<Translator>('$l')!;
+const user = userStore();
+
 </script>
 
 <template>
@@ -18,12 +17,15 @@ export default {
         <!--<div>V</div>
         <div>S</div>-->
       </span>
-      <span v-else>Drone Flight Planer</span>
+      <span v-else v-text="$l('sidebar.title')"/>
     </h1>
 
-    <sidebarLink to="/Home" icon="fas fa-home">Home</sidebarLink>
-    <sidebarLink to="/2" icon="fas fa-home">Test1</sidebarLink>
-    <sidebarLink to="/profile" icon="fas fa-user">Profile</sidebarLink>
+    <sidebarLink to="/" icon="fas fa-home" :text="$l('sidebar.labels.home')"/>
+    <sidebarLink to="/teams" icon="fas fa-people-group" :text="$l('sidebar.labels.teams')"/>
+    <sidebarLink to="/missions" icon="fas fa-earth-europe" :text="$l('sidebar.labels.missions')"/>
+    <sidebarLink to="/flights" icon="fas fa-plane-departure" :text="$l('sidebar.labels.flights')"/>
+    <sidebarLink to="/profile" icon="fas fa-user" :text="$l('sidebar.labels.profile')" />
+    <sidebarLink to="/logout" @click="user.logout()" icon="fas fa-person-walking-arrow-right" :text="$l('sidebar.labels.logout')"/>
     <span
       class="collapse-icon"
       :class="{ 'rotate-180': collapsed }"
@@ -59,6 +61,7 @@ export default {
 }
 .sidebar h1 {
   height: 2.5em;
+  margin-bottom: 0.5em;
 }
 .collapse-icon {
   position: absolute;

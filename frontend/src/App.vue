@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { userStore } from './stores/user';
-import sidebar from '@/components/sidebar/sidebar.vue'
+import sidebar from '@/components/sidebar/sidebarContainer.vue'
 import { sidebarWidth } from '@/components/sidebar/state'
 
 const user = userStore();

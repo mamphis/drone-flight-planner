@@ -5,7 +5,8 @@ import { collapsed } from './state';
 
 const props = defineProps({
   to: { type: String, required: true },
-  icon: { type: String, required: true }
+  icon: { type: String, required: true },
+  text: { type: String, required: true },
 });
 
 const route = useRoute()
@@ -16,9 +17,7 @@ const isActive = computed(() => route.path === props.to)
   <router-link :to="to" class="link" :class="{ active: isActive }">
     <i class="icon" :class="icon" />
     <transition name="fade">
-      <span v-if="!collapsed">
-        <slot />
-      </span>
+      <span class="label" v-if="!collapsed" v-text="text" />
     </transition>
   </router-link>
 </template>
@@ -58,7 +57,9 @@ const isActive = computed(() => route.path === props.to)
 
 .link .icon {
   flex-shrink: 0;
-  width: 25px;
-  margin-right: 10px;
+}
+
+.link .label {
+  margin-left: 0.5em;
 }
 </style>

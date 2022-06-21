@@ -1,11 +1,14 @@
 
 <script lang="ts" setup>
+import { Translator } from '@/libs/localization/localizator';
 import { userStore } from '@/stores/user';
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 const db = userStore();
 let user = ref({ ...db.user! });
 let password = ref('');
 let newPassword = ref('');
+
+const $l = inject<Translator>('$l')!;
 
 async function updatePassword() {
     if (password.value !== newPassword.value) {
@@ -22,40 +25,40 @@ async function updateUser() {
 }
 </script>
 <template>
-    <h1>Profile</h1>
+    <h1 v-text="$l('profile.labels.profile')"/>
     <div class="container">
         <div class="details">
             <div class="field">
-                <div class="label" for="username">Username</div>
+                <div class="label" for="username" v-text="$l('profile.labels.username')" />
                 <input type="text" id="username" v-model="user.username">
             </div>
             <div class="field">
-                <div class="label" for="name">Name</div>
+                <div class="label" for="name" v-text="$l('profile.labels.name')" />
                 <input type="text" id="name" v-model="user.name">
             </div>
             <div class="field">
-                <div class="label" for="mail">E-Mail</div>
+                <div class="label" for="mail" v-text="$l('profile.labels.email')" />
                 <input type="email" id="mail" v-model="user.email">
             </div>
 
             <div class="field">
-                <div class="label" for="oldPassword">Old Password</div>
+                <div class="label" for="oldPassword" v-text="$l('profile.labels.oldPassword')" />
                 <input type="password" id="oldPassword" v-model="password">
             </div>
             <div class="field">
-                <div class="label" for="newPassword">New Password</div>
+                <div class="label" for="newPassword" v-text="$l('profile.labels.newPassword')" />
                 <input type="password" id="newPassword" v-model="newPassword">
             </div>
             <div class="field">
                 <div class="buttons">
-                    <button @click="updatePassword()">Change Password</button>
-                    <button @click="updateUser()">Update Profile</button>
+                    <button @click="updatePassword()" v-text="$l('profile.labels.changePassword')" />
+                    <button @click="updateUser()" v-text="$l('profile.labels.updateProfile')" />
                 </div>
             </div>
         </div>
         <div class="profile-picture">
             <img src="http://gravatar.com/avatar/1231112322131312312?d=identicon" alt="" />
-            <button>Change Profile Picture</button>
+            <button v-text="$l('profile.labels.changeProfilePicture')" />
         </div>
     </div>
 </template>
