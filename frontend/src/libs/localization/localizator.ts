@@ -2,7 +2,7 @@ import languages, { LanguageDefinition, LanguageValues } from './locales';
 
 export type Translator = (key: string, ...args: string[]) => string;
 
-export const translate = (key: string, ...args: string[]) => {
+export const translate = (key: string, ...args: any[]) => {
     const parts = key.split('.');
 
     const getTranslation = (language: LanguageDefinition) => {
@@ -46,5 +46,5 @@ export const translate = (key: string, ...args: string[]) => {
         }
     })();
 
-    return translation ? translation.replace(/\{(\d+)\}/g, (_, index) => args[index] ?? '') : key;
+    return translation ? translation.replace(/\{(\d+)\}/g, (_, index) => args[index]?.toString() ?? '') : key;
 }
