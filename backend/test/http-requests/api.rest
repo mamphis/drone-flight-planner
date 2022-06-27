@@ -34,3 +34,11 @@ Accept: application/json
   "password": "{{password}}",
   "name":"Mamphis"
 }
+
+###
+# @name GetTeams
+# Gets all teams which i own or where i am member of
+GET {{baseApiUri}}teams HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{token}}
+
