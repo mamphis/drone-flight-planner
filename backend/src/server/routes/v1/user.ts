@@ -54,6 +54,11 @@ router.post('/register', async (req, res, next) => {
                 password: await hash(password, 10),
                 email,
                 name,
+                ownedTeams: {
+                    create: {
+                        name: 'Personal Team',
+                    },
+                },
             }
         });
 
