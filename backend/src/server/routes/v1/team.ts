@@ -1,9 +1,19 @@
 import { PrismaClient } from "@prisma/client";
 import { Router } from "express";
+import createHttpError from "http-errors";
 import authHandler from "../../middleware/auth";
 
 const router = Router();
 const client = new PrismaClient();
+
+const ownerSelect = {
+    select: {
+        id: true,
+        name: true,
+        email: true,
+        username: true,
+    },
+};
 
 router.use(authHandler);
 router.get('/', async (req, res, next) => {
@@ -30,14 +40,7 @@ router.get('/', async (req, res, next) => {
             id: true,
             createdAt: true,
             updatedAt: true,
-            owner: {
-                select: {
-                    id: true,
-                    name: true,
-                    email: true,
-                    username: true,
-                },
-            },
+            owner: ownerSelect,
             _count: {
                 select: { members: true }
             },
@@ -45,6 +48,42 @@ router.get('/', async (req, res, next) => {
     });
 
     res.json(teams);
+});
+
+router.get('/:id/members', async (req, res, next) => {
+    const { id } = req.params;
+
+    const team = await client.team.findUnique({
+        where: {
+            id,
+        },
+        select: {
+            id: true,
+            name: true,
+            owner: ownerSelect,
+            members: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    username: true,
+                },
+            },
+        },
+    });
+    
+    if (!team) {
+        return next(createHttpError(404, 'Team not found.'));
+    }
+
+    // TODO: Maybe check if user is member of team or owns it?
+    /*
+    if (team.owner.id !== res.locals.user.id && !team.members.some(m => m.id === res.locals.user.id)) {
+        return next(createHttpError(403, 'You are not allowed to view this team.'));
+    }
+    */
+
+    res.json(team);
 });
 
 
