@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 import { mainStore } from './main';
 import { translate } from '@/libs/localization/localizator';
 
-type User = {
+export type User = {
     username: string,
     email: string,
     id: string,
