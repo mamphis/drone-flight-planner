@@ -1,54 +1,53 @@
-<script lang="ts">
+<script setup lang="ts">
 import { userStore } from "@/stores/user";
-import { defineComponent } from "vue";
+import NotificationMessage from '@/components/notification/notificationMessage.vue';
+import { reactive, inject } from "vue";
+import { Translator } from "@/libs/localization/localizator";
 
-export default defineComponent({
-    data() {
-        return {
-            email: "",
-            password: "",
-            error: "",
-        };
-    },
-    methods: {
-        onSubmit() {
-            const user = userStore();
-            this.error = "";
-            if (this.email === "") {
-                this.error = "Email is required";
-                return;
-            }
-            if (this.password === "") {
-                this.error = "Password is required";
-                return;
-            }
-            user.login(this.email, this.password).catch((err) => {
-                this.error = err.message;
-            });
-        },
-    },
+const $l = inject<Translator>('$l')!;
+
+const state = reactive({
+    error: '',
+    email: '',
+    password: '',
 });
-</script>
 
+function onSubmit() {
+    const user = userStore();
+    state.error = "";
+    if (state.email === "") {
+        state.error = $l('login.messages.emailRequired');
+        return;
+    }
+    if (state.password === "") {
+        state.error = $l('login.messages.passwordRequired');
+        return;
+    }
+    user.login(state.email, state.password).catch((err) => {
+        state.error = err.message;
+    });
+}
+</script>
 
 <template>
     <div class="container">
-        <h1>Login</h1>
+        <h1 v-text="$l('login.labels.login')" />
         <form @submit.prevent="onSubmit">
+            <NotificationMessage v-if="!!state.error" :text="state.error" :type="'error'">
+            </NotificationMessage>
             <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" v-model="email" placeholder="Enter email" />
+                <label for="email" v-text="$l('login.labels.email')" />
+                <input type="email" class="form-control" id="email" v-model="state.email"
+                    :placeholder="$l('login.labels.email.placeholder')" />
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" v-model="password" placeholder="Password" />
-            </div>
-            <div v-if="!!error" class="form-group error">
-                <small>{{ error }}</small>
+                <label for="password" v-text="$l('login.labels.password')" />
+                <input type="password" class="form-control" id="password" v-model="state.password"
+                    :placeholder="$l('login.labels.password.placeholder')" />
             </div>
             <div class="spread">
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <router-link to="/register" class="link">Register</router-link>
+                <button type="submit" class="btn btn-primary" v-text="$l('login.labels.submit')" />
+                <router-link to="/register" class="link" v-text="$l('login.labels.register')" />
             </div>
         </form>
     </div>
@@ -59,6 +58,7 @@ export default defineComponent({
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100%;
 }
 
 .container>h1 {
@@ -80,7 +80,7 @@ export default defineComponent({
 }
 
 .spread {
-    display:flex;
+    display: flex;
     justify-content: space-between;
     align-items: center;
 }

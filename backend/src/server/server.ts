@@ -47,7 +47,7 @@ export class Server {
             if (req.headers.accept?.includes('application/json')) {
                 return res.status(err.statusCode || 500).json(err);
             } else {
-                return res.status(500).send(err.message);
+                return res.status(err.statusCode || 500).send(err.message);
             }
         });
     }

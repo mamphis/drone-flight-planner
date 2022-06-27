@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "conventional-changelog-cli": "^2.2.2"
+  },
+  "scripts": {
+    "preversion": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md && git commit -m \"chore(*): Update changelog\"",
+    "patch": "npm version patch -m \"chore(*): Update to %s\""
+  },
+  "version": "0.0.1"
+}

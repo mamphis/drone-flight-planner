@@ -1,29 +1,32 @@
 <script setup lang="ts">
 import { userStore } from './stores/user';
+import sidebar from '@/components/sidebar/sidebarContainer.vue'
+import { sidebarWidth } from '@/components/sidebar/state'
+
 const user = userStore();
 
 let loggedIn = false;
 
 const updateLoginState = () => {
-  loggedIn = user.isLoggedIn;
+    loggedIn = user.isLoggedIn;
 };
 
 user.$subscribe(() => {
-  updateLoginState();
+    updateLoginState();
 });
 </script>
 
 <template>
-  <nav v-if="loggedIn">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view  class="router"/>
+    <sidebar v-if="loggedIn" />
+    <div :style="{ 'margin-left': loggedIn ? sidebarWidth : 0, width: '100%' }">
+        <router-view />
+    </div>
 </template>
 
 <style>
 @import "@/assets/base.css";
 @import "@/assets/inputs.css";
+
 #app {
     max-width: 1280px;
     margin: 0 auto;
@@ -31,11 +34,14 @@ user.$subscribe(() => {
     font-weight: normal;
     height: 100vh;
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
+    text-align: center;
 }
+
 .navbar {
     flex: 1;
 }
+
 .content {
     flex: 1;
 }
