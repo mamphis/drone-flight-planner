@@ -23,6 +23,7 @@ export const en = {
     register: {
         messages: {
             usernameAlreadyTaken: 'Username or Email is already taken',
+            registerFailed: 'Registration failed: {0}',
         }
     },
     profile: {

@@ -75,9 +75,9 @@ export const userStore = defineStore({
             } else {
                 const { code } = await response.json();
                 if (code === 'P2002') { // TODO: maybe the error code will change depending on the backend
-                    throw new Error('Registration failed: Either Username or Email is already taken.');
+                    throw new Error(translate('register.messages.usernameAlreadyTaken'));
                 }
-                throw new Error(`Registration failed: ${response.status}`);
+                throw new Error(translate('register.messages.registerFailed', response.status));
             }
         },
         async logout() {
