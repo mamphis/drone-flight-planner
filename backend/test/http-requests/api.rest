@@ -42,3 +42,9 @@ GET {{baseApiUri}}teams HTTP/1.1
 Accept: application/json
 Authorization: Bearer {{token}}
 
+###
+# @name GetMissions
+# Gets all missions which i own or where i am member of
+GET {{baseApiUri}}missions HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{token}}
