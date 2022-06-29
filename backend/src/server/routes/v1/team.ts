@@ -96,6 +96,136 @@ router.get('/:id/members', async (req, res, next) => {
     res.json(team);
 });
 
+/**
+ * @api {post} /teams/:id/members Adds a user to a team
+ * @produces 404 - Team not found
+ * @produces 400 - User is already member of team
+ * @produces 403 - Logged in User is not the owner of team
+ * @produces 200 - User added to team
+ */
+router.post('/:id/members', async (req, res, next) => {
+    const { id } = req.params;
+    const { userId } = req.body;
+    try {
+        const team = await client.team.findUnique({
+            where: {
+                id,
+            }, select: {
+                members: true,
+                owner: {
+                    select: {
+                        id: true,
+                    }
+                }
+            }
+        });
 
+        if (!team) {
+            return next(createHttpError(404, 'Team not found.'));
+        }
+
+        if (team.members.some(m => m.id === userId)) {
+            return next(createHttpError(400, 'User is already member of team.'));
+        }
+
+        if (team.owner.id !== res.locals.user.id) {
+            return next(createHttpError(403, 'You are not allowed to add users to this team.'));
+        }
+
+        const newTeam = await client.team.update({
+            where: {
+                id,
+            },
+            data: {
+                members: {
+                    connect: {
+                        id: userId,
+                    },
+                },
+            },
+            select: {
+                id: true,
+                name: true,
+                owner: ownerSelect,
+                members: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        username: true,
+                    },
+                },
+            }
+        });
+
+        res.json(newTeam);
+    } catch (err: any) {
+        next(err);
+    }
+});
+
+/**
+ * @api {delete} /teams/:id/members/:memberId Removes a user from a team
+ * @produces 404 - Team not found
+ * @produces 403 - Logged in User is not the owner of team
+ * @produces 200 - User removed from team
+ */
+router.delete('/:id/members/:memberId', async (req, res, next) => {
+    const { id, memberId } = req.params;
+
+    try {
+        const team = await client.team.findUnique({
+            where: {
+                id,
+            },
+            select: {
+                members: true,
+                owner: {
+                    select: {
+                        id: true,
+                    }
+                }
+            }
+        });
+
+        if (!team) {
+            return next(createHttpError(404, 'Team not found.'));
+        }
+
+        if (team.owner.id !== res.locals.user.id) {
+            return next(createHttpError(403, 'You are not allowed to remove users from this team.'));
+        }
+
+        const newTeam = await client.team.update({
+            where: {
+                id,
+            },
+            data: {
+                members: {
+                    disconnect: {
+                        id: memberId,
+                    },
+                },
+            },
+            select: {
+                id: true,
+                name: true,
+                owner: ownerSelect,
+                members: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        username: true,
+                    },
+                },
+            }
+        });
+
+        res.json(newTeam);
+    } catch (err: any) {
+        next(err);
+    }
+});
 
 export default router;
