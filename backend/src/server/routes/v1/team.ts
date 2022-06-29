@@ -16,6 +16,11 @@ const ownerSelect = {
 };
 
 router.use(authHandler);
+
+/**
+ * @api {get} /teams Gets all teams where the user is owner or member
+ * @produces 200 - Teams found
+ */
 router.get('/', async (req, res, next) => {
     const teams = await client.team.findMany({
         where: {
@@ -50,6 +55,11 @@ router.get('/', async (req, res, next) => {
     res.json(teams);
 });
 
+/**
+ * @api {get} /teams/:id/members Gets detailed information of the teams members
+ * @produces 404 - Team not found
+ * @produces 200 - Team found
+ */
 router.get('/:id/members', async (req, res, next) => {
     const { id } = req.params;
 
@@ -71,7 +81,7 @@ router.get('/:id/members', async (req, res, next) => {
             },
         },
     });
-    
+
     if (!team) {
         return next(createHttpError(404, 'Team not found.'));
     }
