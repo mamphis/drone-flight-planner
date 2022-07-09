@@ -3,6 +3,7 @@ import LoginView from '@/views/LoginView.vue';
 import RegisterView from '@/views/RegisterView.vue';
 import HomeView from '@/views/HomeView.vue';
 import ProfileView from '@/views/ProfileView.vue';
+import MissionView from '@/views/MissionView.vue';
 import { userStore } from '@/stores/user';
 
 const routes: Array<RouteRecordRaw> = [
@@ -21,7 +22,13 @@ const routes: Array<RouteRecordRaw> = [
   }, {
     path: '/profile',
     component: ProfileView,
-    meta: { 
+    meta: {
+      requiresAuth: true,
+    },
+  }, {
+    path: '/missions',
+    component: MissionView,
+    meta: {
       requiresAuth: true,
     },
   }, {

@@ -2,13 +2,8 @@ import router from "@/router";
 import { defineStore } from "pinia";
 import { mainStore } from './main';
 import { translate } from '@/libs/localization/localizator';
+import { User } from "./models";
 
-type User = {
-    username: string,
-    email: string,
-    id: string,
-    name: string
-};
 export const userStore = defineStore({
     id: "user",
     state: () => ({
@@ -17,7 +12,7 @@ export const userStore = defineStore({
     }),
     getters: {
         isLoggedIn(state) {
-            return !!state.user;
+            return !!state.user?.username;
         },
 
         getUser(state) {
