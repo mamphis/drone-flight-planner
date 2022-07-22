@@ -4,6 +4,12 @@ import { mainStore } from './main';
 import { translate } from '@/libs/localization/localizator';
 import { User } from "./models";
 
+export type User = {
+    username: string,
+    email: string,
+    id: string,
+    name: string
+};
 export const userStore = defineStore({
     id: "user",
     state: () => ({

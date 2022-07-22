@@ -18,7 +18,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "mamphis",
+  "username": "test_mamphis",
   "password": "{{password}}"
 }
 
@@ -29,8 +29,22 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "email": "mamphis@example.com",
-  "username": "mamphis",
+  "email": "test222@example.com",
+  "username": "test_mamphis",
   "password": "{{password}}",
   "name":"Mamphis"
 }
+
+###
+# @name GetTeams
+# Gets all teams which i own or where i am member of
+GET {{baseApiUri}}teams HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+# @name GetMissions
+# Gets all missions which i own or where i am member of
+GET {{baseApiUri}}missions HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{token}}
