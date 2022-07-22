@@ -57,7 +57,7 @@ async function updateUser() {
             </div>
         </div>
         <div class="profile-picture">
-            <img src="http://gravatar.com/avatar/1231112322131312312?d=identicon" alt="" />
+            <img src="user.profilePictureUri" alt="" />
             <button v-text="$l('profile.labels.changeProfilePicture')" />
         </div>
     </div>

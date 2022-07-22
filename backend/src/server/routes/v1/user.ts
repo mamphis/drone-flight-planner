@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { compare, hash } from 'bcrypt';
+import { createHash } from 'crypto';
 import { Router } from "express";
 import { sign } from 'jsonwebtoken';
 import createHttpError from "http-errors";
@@ -40,6 +41,7 @@ router.post('/login', async (req, res, next) => {
             username: user.username,
             email: user.email,
             name: user.name,
+            profilePictureUri: user.profilePictureUri,
         }, process.env.JWT_SECRET);
 
         return res.json({
@@ -57,6 +59,11 @@ router.post('/login', async (req, res, next) => {
 router.post('/register', async (req, res, next) => {
     const { username, password, email, name } = req.body;
 
+    const hasher = createHash('md5');
+    hasher.update(username);
+    const usernameHash = hasher.digest().toString('hex');
+    const url = `http://gravatar.com/avatar/${usernameHash}?d=identicon`;
+
     try {
         const user = await client.user.create({
             data: {
@@ -64,9 +71,10 @@ router.post('/register', async (req, res, next) => {
                 password: await hash(password, 10),
                 email,
                 name,
+                profilePictureUri: url,
                 ownedTeams: {
                     create: {
-                        name: 'Personal Team',
+                        name: `${username} Personal Team`,
                     },
                 },
             }
@@ -77,6 +85,7 @@ router.post('/register', async (req, res, next) => {
             username: user.username,
             email: user.email,
             name: user.name,
+            profilePictureUri: user.profilePictureUri,
         }, process.env.JWT_SECRET);
 
         return res.json({

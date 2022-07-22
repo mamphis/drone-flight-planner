@@ -2,7 +2,8 @@ export type User = {
     username: string,
     email: string,
     id: string,
-    name: string
+    name: string,
+    profilePictureUri: string,
 };
 
 export type TeamLean = {
