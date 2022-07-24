@@ -4,6 +4,7 @@ import RegisterView from '@/views/RegisterView.vue';
 import HomeView from '@/views/HomeView.vue';
 import ProfileView from '@/views/ProfileView.vue';
 import MissionView from '@/views/MissionView.vue';
+import MissionPlanningView from '@/views/MissionPlanningView.vue';
 import { userStore } from '@/stores/user';
 
 const routes: Array<RouteRecordRaw> = [
@@ -28,6 +29,13 @@ const routes: Array<RouteRecordRaw> = [
   }, {
     path: '/missions',
     component: MissionView,
+    meta: {
+      requiresAuth: true,
+    },
+  }, {
+    name: 'mission-planning',
+    path: '/missions/:id',
+    component: MissionPlanningView,
     meta: {
       requiresAuth: true,
     },

@@ -5,12 +5,16 @@ import { missionStore } from '@/stores/mission';
 import { teamStore } from '@/stores/team';
 import { storeToRefs } from 'pinia';
 import { inject, ref } from 'vue';
+import { useRouter } from 'vue-router';
+
 const missionDb = missionStore();
 const teamDb = teamStore();
 const { missions } = storeToRefs(missionDb);
 const { teams } = storeToRefs(teamDb);
 
 const $l = inject<Translator>('$l')!;
+const router = useRouter();
+
 teamDb.refreshTeams();
 missionDb.refreshMissions();
 
@@ -64,7 +68,8 @@ function createMission() {
         </div>
     </div>
     <div class="missions">
-        <div class="flight-mission" v-for="(mission) in missions" :key="mission.id">
+        <div class="flight-mission" v-for="(mission) in missions" :key="mission.id"
+            @click="router.push({ name: 'mission-planning', params: { id: mission.id } })">
             <div class="mission-name">
                 <h3 v-text="mission.name" />
             </div>
