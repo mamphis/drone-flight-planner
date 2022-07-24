@@ -57,7 +57,7 @@ async function updateUser() {
             </div>
         </div>
         <div class="profile-picture">
-            <img src="user.profilePictureUri" alt="" />
+            <img :src="`${user.profilePictureUri}&s=256`" alt="" />
             <button v-text="$l('profile.labels.changeProfilePicture')" />
         </div>
     </div>

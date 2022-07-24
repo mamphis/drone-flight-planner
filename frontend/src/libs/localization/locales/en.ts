@@ -42,6 +42,13 @@ export const en = {
     missions: {
         labels: {
             mission: 'Flight Missions',
+            refresh: 'Refresh',
+            newMission: 'New Mission',
+            addMission: 'Add Mission',
+            newMissionTeam: 'Team',
+            newMissionName: 'Name',
+            teamName: 'Team Name',
+            teamOwnerName: 'Team Owner Name',
         }
     },
     sidebar: {
