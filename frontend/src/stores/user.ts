@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 import { mainStore } from './main';
 import { translate } from '@/libs/localization/localizator';
 import { User } from "./models";
+import { post, put } from "@/components/request/http";
 
 export const userStore = defineStore({
     id: "user",
@@ -23,14 +24,7 @@ export const userStore = defineStore({
         async login(username: string, password: string) {
             const main = mainStore();
             const url = `${main.apiUrl}/users/login`;
-            const response = await fetch(url, {
-                method: "POST",
-                body: JSON.stringify({ username, password }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
-            });
+            const response = await post(url, { username, password });
 
             if (response.status === 200) {
                 const { token } = await response.json();
@@ -50,14 +44,7 @@ export const userStore = defineStore({
         async register({ username, password, email, name }: Omit<User, 'id' | 'profilePictureUri'> & { password: string }) {
             const main = mainStore();
             const url = `${main.apiUrl}/users/register`;
-            const response = await fetch(url, {
-                method: "POST",
-                body: JSON.stringify({ username, password, email, name }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
-            });
+            const response = await post(url, { username, password, email, name });
 
             if (response.status === 200) {
                 const { token } = await response.json();
@@ -92,15 +79,7 @@ export const userStore = defineStore({
 
             const main = mainStore();
             const url = `${main.apiUrl}/users/changePassword`;
-            const response = await fetch(url, {
-                method: "POST",
-                body: JSON.stringify({ password, newPassword }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'Authorization': `Bearer ${this.token}`
-                }
-            });
+            const response = await post(url, { password, newPassword });
 
             if (response.status === 200) {
                 return true;
@@ -116,15 +95,7 @@ export const userStore = defineStore({
         async updateUser(user: User): Promise<boolean> {
             const main = mainStore();
             const url = `${main.apiUrl}/users/${this.user?.id}`;
-            const response = await fetch(url, {
-                method: "PUT",
-                body: JSON.stringify(user),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'Authorization': `Bearer ${this.token}`
-                }
-            });
+            const response = await put(url, user);
 
             if (response.status === 200) {
                 const newUser = await response.json() as User;
