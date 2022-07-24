@@ -19,6 +19,11 @@ const request = async (method: string, url: string, body?: any, headers?: any) =
         }
     });
 
+    if (response.status === 401) {
+        console.warn("User is not logged in");
+        user.logout();
+    }
+
     return response;
 }
 
