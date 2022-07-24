@@ -2,7 +2,7 @@ button {
     background-color: var(--color-border);
     border: none;
     color: var(--color-text);
-    padding: 15px 32px;
+    padding: 8px 16px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -15,11 +15,16 @@ button:hover {
     background-color: var(--color-border-hover);
 }
 
+button.sm {
+    padding: 4px 8px;
+    font-size: 14px;
+}
+
 input {
     background-color: var(--color-background-soft);
     border: none;
     color: var(--color-text);
-    padding: 15px 32px;
+    padding: 8px 16px;
     text-align: left;
     text-decoration: none;
     display: inline-block;
@@ -28,20 +33,44 @@ input {
     cursor: pointer;
 }
 
+input.sm {
+    padding: 4px 8px;
+    font-size: 14px;
+}
+
 label {
     color: var(--color-text);
     font-size: 16px;
-    margin: 4px 2px;
+    margin: 2px;
+    margin-right: 4px;
 }
 
+select {
+    background-color: var(--color-background-soft);
+    border: none;
+    color: var(--color-text);
+    padding: 8px 16px;
+    text-align: left;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
 
-a.link, a.link:visited {
+select.sm {
+    padding: 4px 8px;
+    font-size: 14px;
+}
+
+a.link,
+a.link:visited {
     color: var(--color-text);
     font-size: 16px;
     margin: 4px 2px;
     text-decoration: none;
 }
+
 a.link:hover {
     color: var(--color-text-accent);
 }
-

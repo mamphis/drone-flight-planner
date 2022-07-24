@@ -1,3 +1,4 @@
+import { get, post } from "@/components/request/http";
 import { defineStore } from "pinia";
 import { mainStore } from './main';
 import { FlightMission } from "./models";
@@ -20,6 +21,14 @@ export const missionStore = defineStore({
                 this.$patch({
                     missions,
                 });
+            }
+        },
+        async createMission(teamId: string, name: string) {
+            const main = mainStore();
+            const url = `${main.apiUrl}/missions`;
+            const response = await post(url, { teamId, name });
+            if (response.status === 200) {
+                await this.refreshMissions();
             }
         }
     },
