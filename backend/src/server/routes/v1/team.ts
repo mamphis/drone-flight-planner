@@ -1,19 +1,12 @@
 import { PrismaClient } from "@prisma/client";
 import { Router } from "express";
 import createHttpError from "http-errors";
+import { teamDetailSelect, teamLeanSelect } from "../../../libs/team";
 import authHandler from "../../middleware/auth";
 
 const router = Router();
 const client = new PrismaClient();
 
-const ownerSelect = {
-    select: {
-        id: true,
-        name: true,
-        email: true,
-        username: true,
-    },
-};
 
 router.use(authHandler);
 
@@ -40,16 +33,7 @@ router.get('/', async (req, res, next) => {
                 },
             ],
         },
-        select: {
-            name: true,
-            id: true,
-            createdAt: true,
-            updatedAt: true,
-            owner: ownerSelect,
-            _count: {
-                select: { members: true }
-            },
-        },
+        select: teamLeanSelect,
     });
 
     res.json(teams);
@@ -67,19 +51,7 @@ router.get('/:id/members', async (req, res, next) => {
         where: {
             id,
         },
-        select: {
-            id: true,
-            name: true,
-            owner: ownerSelect,
-            members: {
-                select: {
-                    id: true,
-                    name: true,
-                    email: true,
-                    username: true,
-                },
-            },
-        },
+        select: teamDetailSelect,
     });
 
     if (!team) {
@@ -143,19 +115,7 @@ router.post('/:id/members', async (req, res, next) => {
                     },
                 },
             },
-            select: {
-                id: true,
-                name: true,
-                owner: ownerSelect,
-                members: {
-                    select: {
-                        id: true,
-                        name: true,
-                        email: true,
-                        username: true,
-                    },
-                },
-            }
+            select: teamDetailSelect,
         });
 
         res.json(newTeam);
@@ -207,19 +167,7 @@ router.delete('/:id/members/:memberId', async (req, res, next) => {
                     },
                 },
             },
-            select: {
-                id: true,
-                name: true,
-                owner: ownerSelect,
-                members: {
-                    select: {
-                        id: true,
-                        name: true,
-                        email: true,
-                        username: true,
-                    },
-                },
-            }
+            select: teamDetailSelect,
         });
 
         res.json(newTeam);
