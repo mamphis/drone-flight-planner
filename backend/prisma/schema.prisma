@@ -12,14 +12,16 @@ datasource db {
 }
 
 model User {
-    id        String   @id @default(cuid())
-    username  String   @unique
-    email     String   @unique
-    name      String
-    password  String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @default(now()) @updatedAt
-    teams     Team[]
+    id                String   @id @default(cuid())
+    username          String   @unique
+    email             String   @unique
+    name              String
+    password          String
+    profilePictureUri String
+    createdAt         DateTime @default(now())
+    updatedAt         DateTime @default(now()) @updatedAt
+    ownedTeams        Team[]   @relation(name: "ownerRelation")
+    memberOf          Team[]
 }
 
 model Team {
@@ -27,8 +29,10 @@ model Team {
     name           String
     createdAt      DateTime        @default(now())
     updatedAt      DateTime        @default(now()) @updatedAt
+    owner          User            @relation(name: "ownerRelation", fields: [ownerId], references: [id])
     members        User[]
     flightMissions FlightMission[]
+    ownerId        String
 }
 
 model FlightMission {

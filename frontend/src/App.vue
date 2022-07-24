@@ -2,24 +2,29 @@
 import { userStore } from './stores/user';
 import sidebar from '@/components/sidebar/sidebarContainer.vue'
 import { sidebarWidth } from '@/components/sidebar/state'
+import { ref } from 'vue';
 
 const user = userStore();
 
-let loggedIn = false;
+let loggedIn = ref(false);
 
 const updateLoginState = () => {
-    loggedIn = user.isLoggedIn;
+    loggedIn.value = user.isLoggedIn;
+    console.log("Is Logged In: " + loggedIn.value);
 };
 
 user.$subscribe(() => {
     updateLoginState();
 });
+updateLoginState();
 </script>
 
 <template>
     <sidebar v-if="loggedIn" />
     <div :style="{ 'margin-left': loggedIn ? sidebarWidth : 0, width: '100%' }">
-        <router-view />
+        <Suspense>
+            <router-view />
+        </Suspense>
     </div>
 </template>
 

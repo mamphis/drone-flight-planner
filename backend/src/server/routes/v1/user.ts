@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { compare, hash } from 'bcrypt';
+import { createHash } from 'crypto';
 import { Router } from "express";
 import { sign } from 'jsonwebtoken';
 import createHttpError from "http-errors";
@@ -8,6 +9,12 @@ import authHandler from "../../middleware/auth";
 const router = Router();
 const client = new PrismaClient();
 
+/** 
+ * @api {post} /users/login Login a user with a username and password
+ * @produces 404 - User not found
+ * @produces 401 - Wrong password
+ * @produces 200 - User logged in
+ */
 router.post('/login', async (req, res, next) => {
     const { username, password } = req.body;
 
@@ -34,6 +41,7 @@ router.post('/login', async (req, res, next) => {
             username: user.username,
             email: user.email,
             name: user.name,
+            profilePictureUri: user.profilePictureUri,
         }, process.env.JWT_SECRET);
 
         return res.json({
@@ -44,8 +52,17 @@ router.post('/login', async (req, res, next) => {
     }
 });
 
+/**
+ * @api {post} /users/register Register a new user
+ * @produces 200 - User registered
+ */
 router.post('/register', async (req, res, next) => {
     const { username, password, email, name } = req.body;
+
+    const hasher = createHash('md5');
+    hasher.update(username);
+    const usernameHash = hasher.digest().toString('hex');
+    const url = `http://gravatar.com/avatar/${usernameHash}?d=identicon`;
 
     try {
         const user = await client.user.create({
@@ -54,6 +71,12 @@ router.post('/register', async (req, res, next) => {
                 password: await hash(password, 10),
                 email,
                 name,
+                profilePictureUri: url,
+                ownedTeams: {
+                    create: {
+                        name: `${username} Personal Team`,
+                    },
+                },
             }
         });
 
@@ -62,16 +85,25 @@ router.post('/register', async (req, res, next) => {
             username: user.username,
             email: user.email,
             name: user.name,
+            profilePictureUri: user.profilePictureUri,
         }, process.env.JWT_SECRET);
 
         return res.json({
             token,
         });
     } catch (err) {
+        // TODO: Handle specific errors and propagate them to the client, so the client has a consistent error message for specific errors.
+        //       e.g. Duplicate username or email.
         next(err);
     }
 });
 
+/**
+ * @api {post} /users/changePassword Change the password of a user
+ * @produces 400 - Password cannot be verified or not provided
+ * @produces 404 - User not found
+ * @produces 200 - Password changed
+ */
 router.post('/changePassword', authHandler, async (req, res, next) => {
     const { password, newPassword } = req.body;
     if (!password || !newPassword || typeof (password) != "string" || typeof (newPassword) != "string") {
@@ -104,10 +136,19 @@ router.post('/changePassword', authHandler, async (req, res, next) => {
     }
 });
 
+/**
+ * @api {get} /users/me Gets the currently logged in user by redirecting to the /users/:id endpoint
+ * @redirect /users/:id
+ */
 router.get('/me', authHandler, (req, res, next) => {
     return res.redirect(`${req.baseUrl}/${res.locals.user.id}`);
 });
 
+/**
+ * @api {get} /users/:id Gets detailed information of a user
+ * @produces 404 - User not found
+ * @produces 200 - User found
+ */
 router.get('/:id', authHandler, async (req, res, next) => {
     const { id } = req.params;
 
@@ -135,6 +176,11 @@ router.get('/:id', authHandler, async (req, res, next) => {
     }
 });
 
+/**
+ * @api {put} /users/:id Updates a user
+ * @produces 404 - User not found
+ * @produces 200 - User updated
+ */
 router.put('/:id', authHandler, async (req, res, next) => {
     const { id } = req.params;
     const { username, email, name } = req.body;

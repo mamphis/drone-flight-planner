@@ -39,6 +39,11 @@ export const en = {
             changeProfilePicture: 'Change Profile Picture',
         },
     },
+    missions: {
+        labels: {
+            mission: 'Flight Missions',
+        }
+    },
     sidebar: {
         title: 'Drone Flight Planner',
         labels: {
