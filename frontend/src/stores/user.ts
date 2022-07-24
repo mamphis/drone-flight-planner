@@ -47,7 +47,7 @@ export const userStore = defineStore({
                 throw new Error(translate('login.messages.loginFailed', `${response.status}`));
             }
         },
-        async register({ username, password, email, name }: Omit<User, 'id'> & { password: string }) {
+        async register({ username, password, email, name }: Omit<User, 'id' | 'profilePictureUri'> & { password: string }) {
             const main = mainStore();
             const url = `${main.apiUrl}/users/register`;
             const response = await fetch(url, {
