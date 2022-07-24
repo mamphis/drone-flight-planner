@@ -1,7 +1,7 @@
 
 // TODO: Add the store ;)
 
-import { User } from "./user";
+import { User } from "./models";
 
 type TeamOverview = {
     id: string;
