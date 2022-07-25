@@ -51,6 +51,19 @@ export const en = {
             teamOwnerName: 'Team Owner Name',
         }
     },
+    teams: {
+        labels: {
+            team: 'Teams',
+            refresh: 'Refresh',
+            newTeam: 'New Team',
+            addTeam: 'Add Team',
+            newTeamName: 'Name',
+            ownerName: 'Owner Name',
+            memberCount: 'Member Count',
+            flightMissionCount: 'Flight Mission Count',
+            deleteTeam: 'Delete',
+        },
+    },
     sidebar: {
         title: 'Drone Flight Planner',
         labels: {

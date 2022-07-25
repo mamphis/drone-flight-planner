@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { mainStore } from './main';
 import { TeamOverview, User } from "./models";
-import { get } from "@/components/request/http";
+import { del, get, post } from "@/libs/request/http";
 
 export const teamStore = defineStore({
     id: "team",
@@ -21,6 +21,35 @@ export const teamStore = defineStore({
                 this.$patch({
                     teams,
                 });
+            }
+        },
+        async createTeam(name: string) {
+            const main = mainStore();
+            const url = `${main.apiUrl}/teams`;
+            const response = await post(url, { name });
+
+            if (response.status === 200) {
+                this.refreshTeams();
+            } else {
+                const { message } = await response.json();
+                if (message) {
+                    throw new Error(message);
+                }
+            }
+        },
+
+        async deleteTeam(id: string): Promise<void> {
+            const main = mainStore();
+            const url = `${main.apiUrl}/teams/${id}`;
+            const response = await del(url);
+
+            if (response.status === 204) {
+                this.refreshTeams();
+            } else {
+                const { message } = await response.json();
+                if (message) {
+                    throw new Error(message);
+                }
             }
         }
     },

@@ -30,6 +30,6 @@ export const teamLeanSelect = {
     updatedAt: true,
     owner: ownerSelect,
     _count: {
-        select: { members: true }
+        select: { members: true, flightMissions: true }
     },
 };

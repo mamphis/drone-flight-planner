@@ -30,11 +30,11 @@ function onSubmit() {
 </script>
 
 <template>
+    <NotificationMessage v-if="!!state.error" :text="state.error" :type="'error'" @close="state.error = ''">
+    </NotificationMessage>
     <div class="container">
         <h1 v-text="$l('login.labels.login')" />
         <form @submit.prevent="onSubmit">
-            <NotificationMessage v-if="!!state.error" :text="state.error" :type="'error'">
-            </NotificationMessage>
             <div class="form-group">
                 <label for="email" v-text="$l('login.labels.email')" />
                 <input type="email" class="form-control" id="email" v-model="state.email"

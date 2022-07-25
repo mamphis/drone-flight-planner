@@ -15,6 +15,7 @@ export type TeamLean = {
 export type TeamOverview = TeamLean & {
     _count: {
         members: number;
+        flightMissions: number;
     };
     createdAt: string;
     updatedAt: string;
