@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { mainStore } from './main';
 import { TeamOverview, User } from "./models";
-import { get } from "@/components/request/http";
+import { get, post } from "@/components/request/http";
 
 export const teamStore = defineStore({
     id: "team",
@@ -22,7 +22,17 @@ export const teamStore = defineStore({
                     teams,
                 });
             }
-        }
+        },
+        async createTeam(name: string) {
+            const main = mainStore();
+            const url = `${main.apiUrl}/teams`;
+            const response = await post(url, { name });
+
+            if (response.status === 200) {
+                const teams = await response.json();
+                this.refreshTeams();
+            }
+        },
     },
     persist: {
         enabled: true,

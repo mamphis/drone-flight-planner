@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { Router } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import createHttpError from "http-errors";
 import { teamDetailSelect, teamLeanSelect } from "../../../libs/team";
 import authHandler from "../../middleware/auth";
@@ -38,6 +38,32 @@ router.get('/', async (req, res, next) => {
 
     res.json(teams);
 });
+
+/**
+ * @api {post} /teams Creates a new team with the current user as the owner
+ */
+router.post('/', async (req: Request, res: Response, next: NextFunction) => {
+    const { name } = req.body;
+
+    if (!name) {
+        next(createHttpError(400, 'Missing name'));
+        return;
+    }
+    //TODO: Check if the user has created to many teams
+    const team = await client.team.create({
+        data: {
+            name,
+            owner: {
+                connect: {
+                    id: res.locals.user.id,
+                },
+            },
+        },
+    });
+
+    res.json(team);
+});
+
 
 /**
  * @api {get} /teams/:id/members Gets detailed information of the teams members
