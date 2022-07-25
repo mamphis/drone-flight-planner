@@ -40,20 +40,44 @@ export default {
                 console.log(position);
                 map.getView().setCenter(fromLonLat([position.coords.longitude, position.coords.latitude]));
                 map.getView().setZoom(15);
+            }, err => {
+                console.warn(err);
             });
         }
     },
+    
 }
 </script>
 <template>
     <div>
         Mission Planning for {{ id }}
     </div>
-    <div id="map"></div>
+    <div class="container">
+        <div class="settings-container">
+        </div>
+        <div id="map"></div>
+        <div class="waypoint-container">
+
+        </div>
+    </div>
 </template>
 
-<style lang="css">
+<style lang="css" scoped>
+.container {
+    height: 100%;
+    display: flex;
+}
+
+.settings-container {
+    flex: 1;
+}
+
 #map {
     height: 100%;
+    flex: 5;
+}
+
+.waypoint-container {
+    flex: 2;
 }
 </style>
