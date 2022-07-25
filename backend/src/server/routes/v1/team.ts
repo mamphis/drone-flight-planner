@@ -50,21 +50,95 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
         return;
     }
     //TODO: Check if the user has created to many teams
-    const team = await client.team.create({
-        data: {
-            name,
-            owner: {
-                connect: {
-                    id: res.locals.user.id,
+    try {
+        const team = await client.team.create({
+            data: {
+                name,
+                owner: {
+                    connect: {
+                        id: res.locals.user.id,
+                    },
                 },
             },
-        },
-    });
+        });
 
-    res.json(team);
+        res.json(team);
+    } catch (err: any) {
+        return next(err);
+    }
+
 });
 
+/**
+ * @api {delete} /teams/:id Deletes a team
+ */
+router.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
 
+    try {
+        // Get the team and check if the user is the owner 
+        const team = await client.team.findUnique({
+            where: {
+                id,
+            },
+            select: {
+                ownerId: true,
+                _count: {
+                    select: {
+                        flightMissions: true
+                    }
+                }
+            }
+        });
+
+        if (!team) {
+            return next(createHttpError(404, 'Team not found'));
+        }
+
+        if (team.ownerId !== res.locals.user.id) {
+            return next(createHttpError(403, 'You are not the owner of this team'));
+        }
+
+        const user = await client.user.findUniqueOrThrow({
+            where: {
+                id: res.locals.user.id,
+            },
+            select: {
+                _count: {
+                    select: {
+                        ownedTeams: true
+                    }
+                }
+            }
+        });
+
+        if (user._count.ownedTeams === 1) {
+            return next(createHttpError(403, 'You cannot delete the last team'));
+        }
+
+        const deleteFlightMissions = client.flightMission.deleteMany({
+            where: {
+                teamId: {
+                    equals: id,
+                },
+            },
+        });
+
+        const deleteTeam = client.team.delete({
+            where: {
+                id,
+            },
+            include: {
+                flightMissions: true,
+            },
+        });
+
+        await client.$transaction([deleteFlightMissions, deleteTeam]);
+        res.status(200).end();
+    } catch (err: any) {
+        return next(err);
+    }
+});
 /**
  * @api {get} /teams/:id/members Gets detailed information of the teams members
  * @produces 404 - Team not found
