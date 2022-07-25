@@ -2,6 +2,7 @@
 <script lang="ts" setup>
 import { Translator } from '@/libs/localization/localizator';
 import { teamStore } from '@/stores/team';
+import NotificationMessage from '@/components/notification/notificationMessage.vue';
 import { storeToRefs } from 'pinia';
 import { inject, ref } from 'vue';
 const teamDb = teamStore();
@@ -12,6 +13,7 @@ teamDb.refreshTeams();
 
 let addTeam = ref(false);
 let newTeamName = ref('');
+let error = ref("");
 
 function prepareAddTeam() {
     addTeam.value = !addTeam.value;
@@ -21,13 +23,21 @@ function prepareAddTeam() {
 }
 
 function createTeam() {
-    teamDb.createTeam(newTeamName.value);
+    teamDb.createTeam(newTeamName.value).catch(err => {
+        error.value = err.message;
+    });
     newTeamName.value = '';
     addTeam.value = false;
 }
+function deleteTeam(id: string) {
+    teamDb.deleteTeam(id).catch(err => {
+        error.value = err.message;
+    });
+}
 </script>
 <template>
-
+    <NotificationMessage v-if="error" :text="error" :type="'error'" @close="error = ''">
+    </NotificationMessage>
     <div class="header">
         <h1 v-text="$l('teams.labels.team')" />
         <div class="buttons">
@@ -53,7 +63,13 @@ function createTeam() {
             </div>
             <div class="team-info">
                 <p><span class="cap" v-text="$l('teams.labels.memberCount')" />: {{ team._count.members }}</p>
+                <p><span class="cap" v-text="$l('teams.labels.flightMissionCount')" />: {{ team._count.flightMissions }}
+                </p>
                 <p><span class="cap" v-text="$l('teams.labels.ownerName')" />: {{ team.owner.name }}</p>
+            </div>
+            <div class="actions">
+                <button @click="deleteTeam(team.id)"><i class="fas fa-trash" /> {{ $l('teams.labels.deleteTeam')
+                }}</button>
             </div>
         </div>
     </div>
@@ -90,6 +106,7 @@ function createTeam() {
     display: flex;
     width: 100%;
     cursor: pointer;
+    margin-bottom: 1rem;
 }
 
 .team:hover {
@@ -115,5 +132,14 @@ function createTeam() {
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
+}
+
+.actions {
+    flex-basis: 20%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
 }
 </style>

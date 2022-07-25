@@ -60,6 +60,8 @@ export const en = {
             newTeamName: 'Name',
             ownerName: 'Owner Name',
             memberCount: 'Member Count',
+            flightMissionCount: 'Flight Mission Count',
+            deleteTeam: 'Delete',
         },
     },
     sidebar: {
