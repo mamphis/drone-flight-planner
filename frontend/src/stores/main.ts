@@ -4,5 +4,6 @@ export const mainStore = defineStore({
     id: 'main',
     state: () => ({
         apiUrl: 'http://localhost:3000/api/v1',
+        useFullWidth: false,
     }),
 })
