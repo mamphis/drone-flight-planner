@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { defineProps } from 'vue';
+import { defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
     type: {
@@ -15,7 +15,10 @@ const props = defineProps({
     title: {
         type: String, required: false,
     },
-})
+});
+
+const emits = defineEmits(['close']);
+
 </script>
 <template>
     <div class="notification" :class="type">
@@ -23,7 +26,11 @@ const props = defineProps({
             {{ title }}
         </div>
         <div class="body">
-            {{ text }}
+            <span v-text="text"/>
+
+            <div class="close" @click="$emit('close')">
+                <i class="fas fa-xmark" />
+            </div>
         </div>
     </div>
 </template>
@@ -37,6 +44,13 @@ const props = defineProps({
     --color-error-main: #c0392b;
     --color-error-dimmed: #eedddc;
     border-style: none;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 2%;
+    position: absolute;
+    opacity: 0.9;
+    min-width: 50%;
+    z-index: 100;
 }
 
 .notification .title {
@@ -84,5 +98,12 @@ const props = defineProps({
 
 .notification.error .title {
     background-color: var(--color-error-main);
+}
+
+.notification .close {
+    position: absolute;
+    right: calc(.375rem + 4px);
+    top: .375rem;
+    cursor: pointer;
 }
 </style>
