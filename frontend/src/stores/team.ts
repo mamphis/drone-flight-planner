@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { mainStore } from './main';
 import { TeamOverview, User } from "./models";
-import { del, get, post } from "@/components/request/http";
+import { del, get, post } from "@/libs/request/http";
 
 export const teamStore = defineStore({
     id: "team",
