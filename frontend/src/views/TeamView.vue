@@ -57,7 +57,8 @@ function deleteTeam(id: string) {
         </div>
     </div>
     <div class="teams">
-        <div class="team" v-for="(team) in teams" :key="team.id">
+        <div class="team" v-for="(team) in teams" :key="team.id"
+            @click="$router.push({ name: 'team-detail', params: { id: team.id } })">
             <div class="team-name">
                 <h3 v-text="team.name" />
             </div>
