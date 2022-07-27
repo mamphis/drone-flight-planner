@@ -21,6 +21,10 @@ export type TeamOverview = TeamLean & {
     updatedAt: string;
 };
 
+export type TeamDetail = TeamLean & {
+    members: User[];
+}
+
 export type FlightMission = {
     id: string;
     name: string;
