@@ -39,6 +39,20 @@ router.get('/', async (req, res, next) => {
     res.json(teams);
 });
 
+router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    const team = await client.team.findUnique({ where: { id: req.params.id }, select: teamDetailSelect });
+    if (!team) {
+        return next(createHttpError(404, 'Team not found'));
+    }
+
+    if (team.owner.id !== res.locals.user.id && !team.members.some(member => member.id === res.locals.user.id)) {
+        return next(createHttpError(403, 'You are not allowed to view this team'));
+    }
+
+    res.json(team);
+});
+
+
 /**
  * @api {post} /teams Creates a new team with the current user as the owner
  */
@@ -178,6 +192,9 @@ router.get('/:id/members', async (req, res, next) => {
 router.post('/:id/members', async (req, res, next) => {
     const { id } = req.params;
     const { userId } = req.body;
+    const { code } = req.query;
+    let connectUserId = userId;
+
     try {
         const team = await client.team.findUnique({
             where: {
@@ -199,9 +216,14 @@ router.post('/:id/members', async (req, res, next) => {
         if (team.members.some(m => m.id === userId)) {
             return next(createHttpError(400, 'User is already member of team.'));
         }
-
-        if (team.owner.id !== res.locals.user.id) {
-            return next(createHttpError(403, 'You are not allowed to add users to this team.'));
+        if (!code) {
+            if (team.owner.id !== res.locals.user.id) {
+                return next(createHttpError(403, 'You are not allowed to add users to this team.'));
+            }
+        } else {
+            // Join Team with code
+            // TODO: Check if code is valid
+            connectUserId = res.locals.user.id;
         }
 
         const newTeam = await client.team.update({
@@ -211,7 +233,7 @@ router.post('/:id/members', async (req, res, next) => {
             data: {
                 members: {
                     connect: {
-                        id: userId,
+                        id: connectUserId,
                     },
                 },
             },
