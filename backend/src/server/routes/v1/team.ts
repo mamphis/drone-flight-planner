@@ -148,7 +148,7 @@ router.delete('/:id', async (req: Request, res: Response, next: NextFunction) =>
         });
 
         await client.$transaction([deleteFlightMissions, deleteTeam]);
-        res.status(200).end();
+        res.status(204).end();
     } catch (err: any) {
         return next(err);
     }
