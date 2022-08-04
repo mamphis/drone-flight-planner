@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { compare, hash } from 'bcrypt';
-import { createHash } from 'crypto';
+import { createHash, randomBytes } from 'crypto';
 import { Router } from "express";
 import { sign } from 'jsonwebtoken';
 import createHttpError from "http-errors";
@@ -75,6 +75,7 @@ router.post('/register', async (req, res, next) => {
                 ownedTeams: {
                     create: {
                         name: `${username} Personal Team`,
+                        joinCode: randomBytes(16).toString('hex'),
                     },
                 },
             }

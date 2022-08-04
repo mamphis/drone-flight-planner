@@ -116,5 +116,10 @@ export const userStore = defineStore({
     },
     persist: {
         enabled: true,
+        strategies: [
+            {
+                storage: localStorage,
+            }
+        ],
     }
 });

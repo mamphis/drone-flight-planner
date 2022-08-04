@@ -86,6 +86,11 @@ router.beforeEach(async (to, from, next) => {
   if (requiresAuth && !user.isLoggedIn) {
     next('/login')
   } else {
+    // Check if user is logged in but want to go to login or register page
+    if (user.isLoggedIn && (to.path === '/login' || to.path === '/register')) {
+      return next('/');
+    }
+
     // Check for join team route
     if ('code' in to.query && to.redirectedFrom?.matched.some(record => record.name === 'join-team')) {
       const teamDb = teamStore();
@@ -96,11 +101,11 @@ router.beforeEach(async (to, from, next) => {
         // TODO: Maybe notify the user
         console.warn('Cannot join team');
         console.warn(err);
-        next('/teams');
+        return next('/teams');
       }
-    } else {
-      next()
     }
+
+    next()
   }
 });
 export default router

@@ -200,6 +200,7 @@ router.post('/:id/members', async (req, res, next) => {
             where: {
                 id,
             }, select: {
+                joinCode: true,
                 members: true,
                 owner: {
                     select: {
@@ -213,7 +214,7 @@ router.post('/:id/members', async (req, res, next) => {
             return next(createHttpError(404, 'Team not found.'));
         }
 
-        if (team.members.some(m => m.id === userId)) {
+        if (team.members.some(m => m.id === userId) || team.owner.id === userId) {
             return next(createHttpError(400, 'User is already member of team.'));
         }
         if (!code) {
@@ -223,6 +224,10 @@ router.post('/:id/members', async (req, res, next) => {
         } else {
             // Join Team with code
             // TODO: Check if code is valid
+            if (team.joinCode !== code) {
+                return next(createHttpError(400, 'Invalid join code.'));
+            }
+
             connectUserId = res.locals.user.id;
         }
 

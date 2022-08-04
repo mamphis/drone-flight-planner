@@ -12,6 +12,7 @@ const ownerSelect = {
 export const teamDetailSelect = {
     id: true,
     name: true,
+    joinCode: true,
     owner: ownerSelect,
     members: {
         select: {
