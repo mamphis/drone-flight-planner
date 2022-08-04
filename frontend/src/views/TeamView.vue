@@ -2,10 +2,12 @@
 <script lang="ts" setup>
 import { Translator } from '@/libs/localization/localizator';
 import { teamStore } from '@/stores/team';
+import { userStore } from '@/stores/user';
 import NotificationMessage from '@/components/notification/notificationMessage.vue';
 import { storeToRefs } from 'pinia';
-import { inject, ref } from 'vue';
+import { inject, nextTick, onMounted, ref } from 'vue';
 const teamDb = teamStore();
+const user = userStore().user;
 const { teams } = storeToRefs(teamDb);
 
 const $l = inject<Translator>('$l')!;
@@ -14,11 +16,17 @@ teamDb.refreshTeams();
 let addTeam = ref(false);
 let newTeamName = ref('');
 let error = ref("");
+const input = ref<HTMLInputElement|null>(null);
 
 function prepareAddTeam() {
     addTeam.value = !addTeam.value;
     if (addTeam.value == false) {
         newTeamName.value = '';
+    } else {
+        nextTick(() => {
+            console.log(input.value);
+            input.value?.focus();
+        });
     }
 }
 
@@ -49,7 +57,7 @@ function deleteTeam(id: string) {
         <div class="new-team" v-if="addTeam">
             <div class="field">
                 <label for="new-team-name">{{ $l('teams.labels.newTeamName') }}</label>
-                <input type="text" name="newTeamName" id="new-team-name" v-model="newTeamName"
+                <input type="text" ref="input" name="newTeamName" id="new-team-name" v-model="newTeamName"
                     @keypress.enter="createTeam()" />
             </div>
 
@@ -69,7 +77,8 @@ function deleteTeam(id: string) {
                 <p><span class="cap" v-text="$l('teams.labels.ownerName')" />: {{ team.owner.name }}</p>
             </div>
             <div class="actions">
-                <button @click="deleteTeam(team.id)"><i class="fas fa-trash" /> {{ $l('teams.labels.deleteTeam')
+                <button v-if="team.owner.id === user?.id" @click.stop="deleteTeam(team.id)"><i class="fas fa-trash" /> {{
+                        $l('teams.labels.deleteTeam')
                 }}</button>
             </div>
         </div>
