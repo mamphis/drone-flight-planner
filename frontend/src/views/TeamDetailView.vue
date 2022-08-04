@@ -27,10 +27,10 @@ async function removeMember(memberId: string) {
         <div class="team">
             <div class="team-name">
                 <h1>{{ team.name }}</h1>
-                <sub>Owner: {{ team.owner.name }}</sub>
+                <sub>{{ $l('teams.labels.ownerName') }}: {{ team.owner.name }}</sub>
             </div>
             <div class="list-container">
-                <h2 class="header" v-text="$l('team.labels.members')" />
+                <h2 class="header" v-text="$l('teams.labels.members')" />
                 <div class="row" v-for="member in team.members" :key="member.id">
                     <div class="col">
                         {{ member.name }}
@@ -46,7 +46,7 @@ async function removeMember(memberId: string) {
                 </div>
             </div>
             <div class="list-container clickable">
-                <h2 class="header" v-text="$l('team.labels.flights')" />
+                <h2 class="header" v-text="$l('teams.labels.flights')" />
                 <div class="row" v-for="flight in team.flightMissions" :key="flight.id"
                     @click.stop="router.push({ path: `/flights/${flight.id}` })">
                     <div class="col">

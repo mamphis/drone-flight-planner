@@ -62,6 +62,8 @@ export const en = {
             memberCount: 'Member Count',
             flightMissionCount: 'Flight Mission Count',
             deleteTeam: 'Delete',
+            members: 'Members',
+            flights: 'Flights',
         },
     },
     sidebar: {

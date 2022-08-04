@@ -87,7 +87,6 @@ router.beforeEach(async (to, from, next) => {
     next('/login')
   } else {
     // Check for join team route
-    console.log(to);
     if ('code' in to.query && to.redirectedFrom?.matched.some(record => record.name === 'join-team')) {
       const teamDb = teamStore();
       try {
