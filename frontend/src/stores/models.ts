@@ -25,7 +25,7 @@ export type TeamDetail = TeamLean & {
     members: User[];
 }
 
-export type FlightMission = {
+export type FlightMissionLean = {
     id: string;
     name: string;
     team: TeamLean;
