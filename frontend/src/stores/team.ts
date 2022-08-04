@@ -76,6 +76,18 @@ export const teamStore = defineStore({
 
             throw new Error(await response.json());
         },
+
+        async removeMember(id: string, memberId: string): Promise<void> {
+            const main = mainStore();
+            const url = `${main.apiUrl}/teams/${id}/members/${memberId}`;
+            const response = await del(url);
+
+            if (response.status === 200) {
+                return await response.json();
+            }
+
+            throw new Error(await response.json());
+        }
     },
     persist: {
         enabled: true,
