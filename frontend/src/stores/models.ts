@@ -23,6 +23,7 @@ export type TeamOverview = TeamLean & {
 
 export type TeamDetail = TeamLean & {
     members: User[];
+    flightMissions: FlightMissionLean[];
 }
 
 export type FlightMissionLean = {
