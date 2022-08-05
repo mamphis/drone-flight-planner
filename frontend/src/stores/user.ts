@@ -118,8 +118,13 @@ export const userStore = defineStore({
         enabled: true,
         strategies: [
             {
+                paths: ['token'],
                 storage: localStorage,
-            }
+            },
+            {
+                paths: ['user'],
+                storage: sessionStorage,
+            },
         ],
     }
 });
