@@ -30,5 +30,10 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+       <!-- Start of DJI SDK -->
+       <uses-library android:name="com.android.future.usb.accessory" />
+       <uses-library android:name="org.apache.http.legacy" android:required="false" />
+       <meta-data android:name="com.dji.sdk.API_KEY" android:value="b532f53ff918cb82f794ad43" />
+       <!-- End of DJI SDK -->
     </application>
 </manifest>
