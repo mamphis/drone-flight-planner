@@ -25,7 +25,7 @@ const user = userStore();
     <sidebarLink to="/missions" icon="fas fa-earth-europe" :text="$l('sidebar.labels.missions')"/>
     <sidebarLink to="/flights" icon="fas fa-plane-departure" :text="$l('sidebar.labels.flights')"/>
     <sidebarLink to="/profile" icon="fas fa-user" :text="$l('sidebar.labels.profile')" />
-    <sidebarLink to="/logout" @click="user.logout()" icon="fas fa-person-walking-arrow-right" :text="$l('sidebar.labels.logout')"/>
+    <sidebarLink to="#" @click="user.logout()" icon="fas fa-person-walking-arrow-right" :text="$l('sidebar.labels.logout')"/>
     <span
       class="collapse-icon"
       :class="{ 'rotate-180': collapsed }"

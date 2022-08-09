@@ -39,6 +39,20 @@ router.get('/', async (req, res, next) => {
     res.json(teams);
 });
 
+router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    const team = await client.team.findUnique({ where: { id: req.params.id }, select: teamDetailSelect });
+    if (!team) {
+        return next(createHttpError(404, 'Team not found'));
+    }
+
+    if (team.owner.id !== res.locals.user.id && !team.members.some(member => member.id === res.locals.user.id)) {
+        return next(createHttpError(403, 'You are not allowed to view this team'));
+    }
+
+    res.json(team);
+});
+
+
 /**
  * @api {post} /teams Creates a new team with the current user as the owner
  */
@@ -134,7 +148,7 @@ router.delete('/:id', async (req: Request, res: Response, next: NextFunction) =>
         });
 
         await client.$transaction([deleteFlightMissions, deleteTeam]);
-        res.status(200).end();
+        res.status(204).end();
     } catch (err: any) {
         return next(err);
     }
@@ -178,11 +192,15 @@ router.get('/:id/members', async (req, res, next) => {
 router.post('/:id/members', async (req, res, next) => {
     const { id } = req.params;
     const { userId } = req.body;
+    const { code } = req.query;
+    let connectUserId = userId;
+
     try {
         const team = await client.team.findUnique({
             where: {
                 id,
             }, select: {
+                joinCode: true,
                 members: true,
                 owner: {
                     select: {
@@ -196,12 +214,21 @@ router.post('/:id/members', async (req, res, next) => {
             return next(createHttpError(404, 'Team not found.'));
         }
 
-        if (team.members.some(m => m.id === userId)) {
+        if (team.members.some(m => m.id === userId) || team.owner.id === userId) {
             return next(createHttpError(400, 'User is already member of team.'));
         }
+        if (!code) {
+            if (team.owner.id !== res.locals.user.id) {
+                return next(createHttpError(403, 'You are not allowed to add users to this team.'));
+            }
+        } else {
+            // Join Team with code
+            // TODO: Check if code is valid
+            if (team.joinCode !== code) {
+                return next(createHttpError(400, 'Invalid join code.'));
+            }
 
-        if (team.owner.id !== res.locals.user.id) {
-            return next(createHttpError(403, 'You are not allowed to add users to this team.'));
+            connectUserId = res.locals.user.id;
         }
 
         const newTeam = await client.team.update({
@@ -211,7 +238,7 @@ router.post('/:id/members', async (req, res, next) => {
             data: {
                 members: {
                     connect: {
-                        id: userId,
+                        id: connectUserId,
                     },
                 },
             },
