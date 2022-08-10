@@ -1,12 +1,12 @@
-import { get, post } from "@/components/request/http";
+import { get, post } from "@/libs/request/http";
 import { defineStore } from "pinia";
 import { mainStore } from './main';
-import { FlightMission } from "./models";
+import { FlightMissionLean } from "./models";
 
 export const missionStore = defineStore({
     id: "mission",
     state: () => ({
-        missions: [] as FlightMission[]
+        missions: [] as FlightMissionLean[]
     }),
     getters: {
 

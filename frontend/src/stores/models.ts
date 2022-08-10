@@ -15,12 +15,19 @@ export type TeamLean = {
 export type TeamOverview = TeamLean & {
     _count: {
         members: number;
+        flightMissions: number;
     };
     createdAt: string;
     updatedAt: string;
 };
 
-export type FlightMission = {
+export type TeamDetail = TeamLean & {
+    members: User[];
+    joinCode: string;
+    flightMissions: FlightMissionLean[];
+}
+
+export type FlightMissionLean = {
     id: string;
     name: string;
     team: TeamLean;

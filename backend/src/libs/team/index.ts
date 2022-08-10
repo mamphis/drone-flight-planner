@@ -1,4 +1,4 @@
-import { PrismaClient, User } from "@prisma/client";
+import { flightMissionLeanSelect } from "../flightMissions";
 
 const ownerSelect = {
     select: {
@@ -12,6 +12,7 @@ const ownerSelect = {
 export const teamDetailSelect = {
     id: true,
     name: true,
+    joinCode: true,
     owner: ownerSelect,
     members: {
         select: {
@@ -21,6 +22,9 @@ export const teamDetailSelect = {
             username: true,
         },
     },
+    flightMissions: {
+        select: flightMissionLeanSelect
+    }
 };
 
 export const teamLeanSelect = {
@@ -30,6 +34,6 @@ export const teamLeanSelect = {
     updatedAt: true,
     owner: ownerSelect,
     _count: {
-        select: { members: true }
+        select: { members: true, flightMissions: true }
     },
 };

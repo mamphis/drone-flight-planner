@@ -46,5 +46,10 @@ export const translate = (key: string, ...args: any[]) => {
         }
     })();
 
-    return translation ? translation.replace(/\{(\d+)\}/g, (_, index) => args[index]?.toString() ?? '') : key;
+    if (!translation) {
+        console.warn(`No translation found for key ${key}`);
+        return key;
+    }
+
+    return translation.replace(/\{(\d+)\}/g, (_, index) => args[index]?.toString() ?? '');
 }

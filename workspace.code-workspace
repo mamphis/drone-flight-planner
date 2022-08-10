@@ -8,6 +8,12 @@
 		},
 		{
 			"path": "frontend"
+		},
+		{
+			"path": "app"
+		},
+		{
+			"path": ".git/hooks"
 		}
 	],
 	"settings": {}

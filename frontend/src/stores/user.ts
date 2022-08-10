@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 import { mainStore } from './main';
 import { translate } from '@/libs/localization/localizator';
 import { User } from "./models";
-import { post, put } from "@/components/request/http";
+import { post, put } from "@/libs/request/http";
 
 export const userStore = defineStore({
     id: "user",
@@ -28,9 +28,10 @@ export const userStore = defineStore({
 
             if (response.status === 200) {
                 const { token } = await response.json();
+
                 this.$patch({
                     token,
-                    user: JSON.parse(atob(token.split('.')[1])) as User
+                    user: JSON.parse(atob(token.split('.')[1].replace('_', '/').replace('-', '+'))) as User
                 });
                 router.push('/');
                 return;
@@ -115,5 +116,15 @@ export const userStore = defineStore({
     },
     persist: {
         enabled: true,
+        strategies: [
+            {
+                paths: ['token'],
+                storage: localStorage,
+            },
+            {
+                paths: ['user'],
+                storage: sessionStorage,
+            },
+        ],
     }
 });
