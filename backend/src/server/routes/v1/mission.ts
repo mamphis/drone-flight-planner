@@ -56,9 +56,9 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
                 flightSpeed: true,
                 homeLatitude: true,
                 homeLongitude: true,
+                waypoints: true
             },
         });
-
         res.json(missions);
     } catch (err) {
         next(err);
@@ -136,5 +136,24 @@ router.put('/:flightMissionId', async (req: Request, res: Response, next: NextFu
         return next(err);
     }
 });
+
+/**
+ * @api {get} /missions/:id Gets all missions for the user
+ * @produces 200 - All missions in an array
+ */
+router.get('/:missionId', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const mission = await client.flightMission.findUniqueOrThrow({
+            where: {
+                id: req.params.missionId
+            },
+            select: flightMissionDetailSelect
+        });
+        res.json(mission);
+    } catch (err) {
+        next(err);
+    }
+});
+
 
 export default router;

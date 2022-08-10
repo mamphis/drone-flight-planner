@@ -30,6 +30,23 @@ export const missionStore = defineStore({
             if (response.status === 200) {
                 await this.refreshMissions();
             }
+        },
+
+        updateMision(mission: FlightMissionLean) {
+            console.log(mission)
+            return true;
+        },
+
+        async getMission(id: string): Promise<FlightMissionLean> {
+            const main = mainStore();
+            const url = `${main.apiUrl}/missions/${id}`;
+            const response = await get(url);
+            if (response.status === 200) {
+                const mission = await response.json();
+                return mission;
+            }
+
+            throw new Error("Mission not found");
         }
     },
     persist: {

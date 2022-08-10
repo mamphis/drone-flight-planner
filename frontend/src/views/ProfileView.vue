@@ -19,13 +19,13 @@ async function updatePassword() {
 }
 
 async function updateUser() {
-    if(await db.updateUser(user.value)){
+    if (await db.updateUser(user.value)) {
         user.value = db.user!;
     }
 }
 </script>
 <template>
-    <h1 v-text="$l('profile.labels.profile')"/>
+    <h1 v-text="$l('profile.labels.profile')" />
     <div class="container">
         <div class="details">
             <div class="field">

@@ -50,6 +50,7 @@ export const en = {
             teamName: 'Team Name',
             teamOwnerName: 'Team Owner Name',
         }
+        
     },
     teams: {
         labels: {
@@ -68,6 +69,16 @@ export const en = {
             copyInvite: 'Copy Invite',
         },
     },
+    flightMissionOverview: {
+        labels: {
+            flightAltitude: 'Flight Altitude',
+            homeLongitude: 'Home Longitude',
+            homeLatitude: 'Home Latitude',
+            flightSpeed: 'Flight Speed',
+            save: 'Save'
+        }
+    },
+
     sidebar: {
         title: 'Drone Flight Planner',
         labels: {

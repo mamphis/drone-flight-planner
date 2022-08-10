@@ -35,4 +35,17 @@ export type FlightMissionLean = {
     flightSpeed: number;
     homeLatitude: number;
     homeLongitude: number;
+    waypoints: Waypoint[];
+}
+
+export type Waypoint = {
+    id: string;
+    name: string;
+    latitude: number;
+    longitude: number;
+    altitude: number;
+    action: number;
+    orientationMode: number;
+    orientation: number;
+    gimbalAngle: number;
 }
