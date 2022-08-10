@@ -59,6 +59,7 @@ export const en = {
             newTeam: 'New Team',
             addTeam: 'Add Team',
             newTeamName: 'Name',
+            teamName: 'Team Name',
             ownerName: 'Owner Name',
             memberCount: 'Member Count',
             flightMissionCount: 'Flight Mission Count',
@@ -76,6 +77,17 @@ export const en = {
             homeLatitude: 'Home Latitude',
             flightSpeed: 'Flight Speed',
             save: 'Save'
+        },
+        propertyWindow: {
+            name: 'Name',
+            altitude: 'Altitude',
+            longitude: 'Longitude',
+            latitude: 'Latitude',
+            flightSpeed: 'Flight Speed',
+            orientationMode: 'Orientation Mode',
+            orientation: 'Orientation',
+            gimbleAngle: 'Gimble Angle',
+            action: 'Action'
         }
     },
 

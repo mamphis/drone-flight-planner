@@ -46,7 +46,7 @@ function deleteTeam(id: string) {
 <template>
     <NotificationMessage v-if="error" :text="error" :type="'error'" @close="error = ''">
     </NotificationMessage>
-    <div class="header">
+    <div class="title">
         <h1 v-text="$l('teams.labels.team')" />
         <div class="buttons">
             <button @click="prepareAddTeam()"><i class="fas fa-plus" /> {{
@@ -65,21 +65,27 @@ function deleteTeam(id: string) {
         </div>
     </div>
     <div class="list-container clickable">
-        <div class="row" v-for="(team) in teams" :key="team.id"
-            @click="$router.push({ name: 'team-detail', params: { id: team.id } })">
-            <div class="col">
-                <h3 v-text="team.name" />
-            </div>
-            <div class="col">
-                <p><span class="cap" v-text="$l('teams.labels.memberCount')" />: {{ team._count.members }}</p>
-                <p><span class="cap" v-text="$l('teams.labels.flightMissionCount')" />: {{ team._count.flightMissions }}
-                </p>
-                <p><span class="cap" v-text="$l('teams.labels.ownerName')" />: {{ team.owner.name }}</p>
-            </div>
-            <div class="actions">
-                <button v-if="team.owner.id === user?.id" @click.stop="deleteTeam(team.id)"><i class="fas fa-trash" /> {{
-                        $l('teams.labels.deleteTeam')
-                }}</button>
+        <div class="header">
+            <div class="col wide" v-text="$l('teams.labels.teamName')" />
+            <div class="col" v-text="$l('teams.labels.memberCount')" />
+            <div class="col" v-text="$l('teams.labels.flightMissionCount')" />
+            <div class="col" v-text="$l('teams.labels.ownerName')" />
+            <div class="actions" />
+        </div>
+        <div class="body">
+            <div class="row" v-for="(team) in teams" :key="team.id"
+                @click="$router.push({ name: 'team-detail', params: { id: team.id } })">
+                <div class="col wide">
+                    <h3 v-text="team.name" />
+                </div>
+                <div class="col" v-text="team._count.members"/>
+                <div class="col" v-text="team._count.flightMissions"/>
+                <div class="col" v-text="team.owner.name"/>
+                <div class="actions">
+                    <button v-if="team.owner.id === user?.id" @click.stop="deleteTeam(team.id)"><i class="fas fa-trash" /> {{
+                            $l('teams.labels.deleteTeam')
+                    }}</button>
+                </div>
             </div>
         </div>
     </div>
@@ -88,7 +94,7 @@ function deleteTeam(id: string) {
 <style scoped>
 @import '@/assets/lists.css';
 
-.header {
+.title {
     display: flex;
     justify-content: space-between;
     align-items: center;

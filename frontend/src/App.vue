@@ -14,7 +14,7 @@ export default {
 </script>
 <template>
     <sidebar v-if="isLoggedIn" />
-    <div :style="{ 'margin-left': isLoggedIn ? sidebarWidth : 0, width: '100%' }">
+    <div :style="{ 'margin-left': isLoggedIn ? sidebarWidth : 0, width: '100%' }" id="router-view">
         <Suspense>
             <router-view />
         </Suspense>
@@ -41,5 +41,17 @@ export default {
 
 .content {
     flex: 1;
+}
+
+#router-view>* {
+    min-height: 0;
+}
+</style>
+
+<style scoped>
+#router-view {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 </style>
