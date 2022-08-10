@@ -1,10 +1,14 @@
 {
   "devDependencies": {
-    "conventional-changelog-cli": "^2.2.2"
+    "@commitlint/cli": "^17.0.3",
+    "@commitlint/config-conventional": "^17.0.3",
+    "conventional-changelog-cli": "^2.2.2",
+    "husky": "^8.0.0"
   },
   "scripts": {
     "preversion": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md && git commit -m \"chore(*): Update changelog\"",
-    "patch": "npm version patch -m \"chore(*): Update to %s\""
+    "patch": "npm version patch -m \"chore(*): Update to %s\"",
+    "prepare": "husky install"
   },
   "version": "0.0.1"
 }
